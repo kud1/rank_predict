@@ -9,44 +9,25 @@ import config
 features = ['weight', 'agree_cnt', 'ques_focus_cnt', 'ques_view_cnt', 'category', 'search_rank']
 
 
-def grouping(data):
-    """
-    数据分组，分成训练数据与测试数据两组
-    :param data:
-    :return:
-    """
-    import random
-    random.shuffle(data)
-    train_lable = list()
-    train_target = list()
-    test_lable = list()
-    test_target = list()
-    index = 0
-    for item in data.items():
-        index += 1
-        if index/5 == 0:
-            test_target.append(item['search_rank'])
-            test_lable.append(item.values())
-        else:
-            train_target.append(item['search_rank'])
-            train_lable.append(item.values())
-    return train_lable, train_target, test_lable, test_target
-
-
 def preprocess(data):
     """
     数据预处理
     :param data:
     :return:
     """
-    results = list()
+    lables = list()
+    targets = list()
     for item in data:
         item['weight'] = _tf_idf(item.pop('kewyord'), item.pop('title')+'。'+item.pop('content'))
         result = dict()
         for feature in features:
             result[feature] = item[feature]
-            results.append(result)
-    return results
+
+        rank = int(item.pop('search_rank'))
+        target = rank // 3 + rank % 3
+        targets.append(target)
+        lables.append(result.values())
+    return lables, targets
 
 
 def clean(data):
@@ -137,7 +118,6 @@ def read_data():
             count -= 1000
     data = clean(data)
     data = preprocess(data)
-    data = grouping(data)
     return data
 
 if __name__ == '__main__':
