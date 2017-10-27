@@ -74,7 +74,7 @@ def svm_classifier(train_x, train_y):
 # SVM Classifier using cross validation
 # 交叉验证 支持向量机分类器
 def svm_cross_validation(train_x, train_y):
-    from sklearn.grid_search import GridSearchCV
+    from sklearn.model_selection import GridSearchCV
     from sklearn.svm import SVC
     model = SVC(kernel='rbf', probability=True)
     param_grid = {'C': [1e-3, 1e-2, 1e-1, 1, 10, 100, 1000], 'gamma': [0.001, 0.0001]}
@@ -88,8 +88,9 @@ def svm_cross_validation(train_x, train_y):
     return model
 
 if __name__ == '__main__':
-    from data import read_data
-    train_x, train_y, test_x, test_y = read_data()
+    from sklearn import model_selection
+    from data.data_process import read_data
+    train_x, train_y, test_x, test_y = model_selection.train_test_split(read_data(), test_size=0.2, random_state=0)
     classifiers = {'NB': naive_bayes_classifier,
                    'KNN': knn_classifier,
                    'LR': logistic_regression_classifier,
