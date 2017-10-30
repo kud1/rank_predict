@@ -1,9 +1,9 @@
 DATASET_DB = {
-    "host": "123.206.214.163",
-    "password": "ZhangLe@0910",
-    "db": "rank_yuce",
-    "user": "zhangle",
-    "charset": "utf8",
+    "host": "****",
+    "password": "****",
+    "db": "****",
+    "user": "****",
+    "charset": "****",
 }
 
 # 为每个feature设置weight
