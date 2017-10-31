@@ -11,8 +11,8 @@ from sklearn import metrics
 # Multinomial Naive Bayes Classifier
 # 朴素贝叶斯分类器
 def naive_bayes_classifier(train_x, train_y, weights=None):
-    from sklearn.naive_bayes import MultinomialNB
-    model = MultinomialNB(alpha=0.01)
+    from sklearn.naive_bayes import GaussianNB
+    model = GaussianNB()
     model.fit(train_x, train_y, weights)
     return model
 
@@ -89,8 +89,13 @@ def svm_cross_validation(train_x, train_y, weights=None):
 
 if __name__ == '__main__':
     from sklearn import model_selection
+    from sklearn import preprocessing
+    import numpy as np
     from data.data_process import read_data
+
     data, target, weights = read_data()
+    data = np.array(data)
+    data = preprocessing.scale(data)
     train_x, test_x, train_y, test_y = model_selection.train_test_split(data, target, test_size=0.2, random_state=0)
     classifiers = {'NB': naive_bayes_classifier,
                    'KNN': knn_classifier,
@@ -98,8 +103,8 @@ if __name__ == '__main__':
                    'RF': random_forest_classifier,
                    'DT': decision_tree_classifier,
                    'SVM': svm_classifier,
-                   'SVMCV': svm_cross_validation,
-                   'GBDT': gradient_boosting_classifier
+                   'GBDT': gradient_boosting_classifier,
+                   # 'SVMCV': svm_cross_validation,
                    }
 
     print('reading training and testing data...')
